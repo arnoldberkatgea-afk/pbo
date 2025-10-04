@@ -1,9 +1,9 @@
 class Mahasiswa {
   constructor(nama, nim, nilai) {
-    this.nama = nama;  // Atribut publik
-    this.nim = nim;    // Atribut publik
+    this.nama = nama; 
+    this.nim = nim;   
 
-    let _nilai = nilai;  // Atribut private menggunakan closure
+    let _nilai = nilai; 
 
     // 1. Getter untuk nilai
     this.getNilai = function() {
@@ -37,7 +37,7 @@ class Mahasiswa {
 
 // 🔹 Object 1
 let mhs1 = new Mahasiswa('Arnold', '2304001', 87);
-console.log(mhs1.getInfo()); // tampil semua atribut
+console.log(mhs1.getInfo()); 
 
 mhs1.setNilai(90);
 console.log("Nilai baru mhs1:", mhs1.getNilai());
