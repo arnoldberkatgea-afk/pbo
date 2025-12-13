@@ -1,0 +1,16 @@
+name: CI HTML Project
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  check-html:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cek isi repository
+        run: ls -la
