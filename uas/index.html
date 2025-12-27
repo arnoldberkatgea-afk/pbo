@@ -82,14 +82,12 @@
 <!-- DASHBOARD -->
 <div class="card dashboard" id="dashboardCard">
     <h2 id="welcomeText"></h2>
-    <p>Anda berhasil masuk ke sistem 🎉</p>
+    <p>Anda berhasil masuk ke sistem </p>
     <button class="logout" id="logoutBtn">Logout</button>
 </div>
 
 <script>
-/* =====================
-   CLASS USER
-===================== */
+
 class User {
     constructor(username, password) {
         this.username = username;
@@ -97,9 +95,7 @@ class User {
     }
 }
 
-/* =====================
-   CLASS STORAGE
-===================== */
+
 class Storage {
     static saveUser(user) {
         localStorage.setItem("userData", JSON.stringify(user));
@@ -119,9 +115,6 @@ class Storage {
     }
 }
 
-/* =====================
-   CLASS AUTH
-===================== */
 class Auth {
     login(username, password) {
         const user = Storage.getUser();
@@ -129,9 +122,6 @@ class Auth {
     }
 }
 
-/* =====================
-   CLASS VIEW
-===================== */
 class View {
     showDashboard(username) {
         document.getElementById("loginCard").style.display = "none";
@@ -146,18 +136,14 @@ class View {
     }
 }
 
-/* =====================
-   INIT DATA
-===================== */
+
 const defaultUser = new User("admin", "123");
 Storage.saveUser(defaultUser);
 
 const auth = new Auth();
 const view = new View();
 
-/* =====================
-   EVENT LOGIN
-===================== */
+
 document.getElementById("loginBtn").addEventListener("click", () => {
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value.trim();
