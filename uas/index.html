@@ -52,3 +52,139 @@
     button:hover {
         background: #4338ca;
     }
+
+    .error {
+        color: red;
+        margin-top: 10px;
+    }
+
+    .dashboard {
+        display: none;
+    }
+
+    .logout {
+        margin-top: 15px;
+        background: #ef4444;
+    }
+</style>
+</head>
+<body>
+
+<!-- LOGIN CARD -->
+<div class="card" id="loginCard">
+    <h2>Login Sistem</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button id="loginBtn">Masuk</button>
+    <div id="msg"></div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="card dashboard" id="dashboardCard">
+    <h2 id="welcomeText"></h2>
+    <p>Anda berhasil masuk ke sistem 🎉</p>
+    <button class="logout" id="logoutBtn">Logout</button>
+</div>
+
+<script>
+/* =====================
+   CLASS USER
+===================== */
+class User {
+    constructor(username, password) {
+        this.username = username;
+        this.password = password;
+    }
+}
+
+/* =====================
+   CLASS STORAGE
+===================== */
+class Storage {
+    static saveUser(user) {
+        localStorage.setItem("userData", JSON.stringify(user));
+    }
+
+    static getUser() {
+        return JSON.parse(localStorage.getItem("userData"));
+    }
+
+    static setLogin(username) {
+        localStorage.setItem("loginStatus", "true");
+        localStorage.setItem("activeUser", username);
+    }
+
+    static logout() {
+        localStorage.clear();
+    }
+}
+
+/* =====================
+   CLASS AUTH
+===================== */
+class Auth {
+    login(username, password) {
+        const user = Storage.getUser();
+        return user.username === username && user.password === password;
+    }
+}
+
+/* =====================
+   CLASS VIEW
+===================== */
+class View {
+    showDashboard(username) {
+        document.getElementById("loginCard").style.display = "none";
+        document.getElementById("dashboardCard").style.display = "block";
+        document.getElementById("welcomeText").innerText =
+            `Selamat Datang, ${username}`;
+    }
+
+    showError(text) {
+        document.getElementById("msg").innerHTML =
+            `<p class="error">${text}</p>`;
+    }
+}
+
+/* =====================
+   INIT DATA
+===================== */
+const defaultUser = new User("admin", "123");
+Storage.saveUser(defaultUser);
+
+const auth = new Auth();
+const view = new View();
+
+/* =====================
+   EVENT LOGIN
+===================== */
+document.getElementById("loginBtn").addEventListener("click", () => {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (auth.login(username, password)) {
+        Storage.setLogin(username);
+        view.showDashboard(username);
+    } else {
+        view.showError("Username atau password salah!");
+    }
+});
+
+/* =====================
+   LOGOUT
+===================== */
+document.getElementById("logoutBtn").addEventListener("click", () => {
+    Storage.logout();
+    location.reload();
+});
+
+/* =====================
+   AUTO LOGIN
+===================== */
+if (localStorage.getItem("loginStatus") === "true") {
+    view.showDashboard(localStorage.getItem("activeUser"));
+}
+</script>
+
+</body>
+</html>
