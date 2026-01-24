@@ -15,6 +15,7 @@ body{
     align-items:center;
 }
 
+/* Card utama */
 .card{
     background:white;
     width:380px;
@@ -23,15 +24,12 @@ body{
     box-shadow:0 10px 30px rgba(0,0,0,.2);
 }
 
+/* Header */
 .header{
     background:#2d3e87;
     color:white;
     padding:25px;
     text-align:center;
-}
-
-.header h2{
-    margin:0;
 }
 
 .content{
@@ -60,6 +58,7 @@ button:hover{
     opacity:0.9;
 }
 
+/* Class untuk menyembunyikan halaman */
 .hidden{
     display:none;
 }
@@ -68,7 +67,7 @@ button:hover{
 
 <body>
 
-<!-- LOGIN -->
+<!-- HALAMAN LOGIN -->
 <div class="card" id="loginPage">
     <div class="header">
         <h2>Welcome! 👋</h2>
@@ -81,7 +80,7 @@ button:hover{
     </div>
 </div>
 
-<!-- DASHBOARD -->
+<!-- HALAMAN DASHBOARD -->
 <div class="card hidden" id="dashboard">
     <div class="header">
         <h2>Dashboard</h2>
@@ -93,25 +92,37 @@ button:hover{
 </div>
 
 <script>
+// =====================================================
+// Class AuthApp
+// Digunakan untuk mengelola proses login dan logout
+// Data user disimpan menggunakan LocalStorage
+// LocalStorage berperan sebagai simulasi File I/O
+// Implementasi menggunakan konsep OOP (Object Oriented Programming)
+// =====================================================
+
 class AuthApp{
     constructor(){
+        // Data user yang dapat digunakan untuk login
         this.users = [
             {username:"arnold", password:"123", nama:"Arnold Berkta Gea"},
-            {username:"salma", password:"456", nama:"Salma"},
-            {username:"parulian", password:"789", nama:"Parulian"}
+            {username:"salma", password:"222", nama:"Salma"},
+            {username:"ifan", password:"332", nama:"Ifan"}
         ];
 
+        // Menyimpan data user ke LocalStorage jika belum ada
         if(!localStorage.getItem("users")){
             localStorage.setItem("users", JSON.stringify(this.users));
         }
     }
 
+    // Method untuk proses login
     login(){
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
 
         const users = JSON.parse(localStorage.getItem("users"));
 
+        // Mencocokkan username dan password
         const user = users.find(
             u => u.username === username && u.password === password
         );
@@ -124,6 +135,7 @@ class AuthApp{
         }
     }
 
+    // Menampilkan halaman dashboard
     showDashboard(){
         document.getElementById("loginPage").classList.add("hidden");
         document.getElementById("dashboard").classList.remove("hidden");
@@ -132,6 +144,7 @@ class AuthApp{
         document.getElementById("namaUser").innerText = user.nama;
     }
 
+    // Method untuk logout
     logout(){
         localStorage.removeItem("loginUser");
         document.getElementById("dashboard").classList.add("hidden");
@@ -139,8 +152,10 @@ class AuthApp{
     }
 }
 
+// Object dari class AuthApp
 const app = new AuthApp();
 
+// Mengecek status login saat halaman dibuka
 if(localStorage.getItem("loginUser")){
     app.showDashboard();
 }
