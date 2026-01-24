@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Aplikasi Login OOP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        .login-btn {
+            background-color: #28a745; /* hijau */
+        }
+
+        .logout-btn {
+            background-color: #dc3545; /* merah */
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="loginPage">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button class="login-btn" onclick="app.login()">Login</button>
+</div>
+
+<div class="container hidden" id="profilePage">
+    <h2>Profil</h2>
+    <p>Selamat datang, <strong id="userDisplay"></strong></p>
+    <button class="logout-btn" onclick="app.logout()">Logout</button>
+</div>
+
+<script>
+    class UserAuth {
+        constructor() {
+            this.defaultUser = {
+                username: "admin",
+                password: "12345"
+            };
+
+            if (!localStorage.getItem("userData")) {
+                localStorage.setItem("userData", JSON.stringify(this.defaultUser));
+            }
+        }
+
+        login() {
+            const usernameInput = document.getElementById("username").value;
+            const passwordInput = document.getElementById("password").value;
+
+            const userData = JSON.parse(localStorage.getItem("userData"));
+
+            if (
+                usernameInput === userData.username &&
+                passwordInput === userData.password
+            ) {
+                localStorage.setItem("isLogin", "true");
+                localStorage.setItem("loginUser", usernameInput);
+                this.showProfile();
+            } else {
+                alert("Login gagal! Username atau password salah.");
+            }
+        }
+
+        showProfile() {
+            document.getElementById("loginPage").classList.add("hidden");
+            document.getElementById("profilePage").classList.remove("hidden");
+            document.getElementById("userDisplay").innerText =
+                localStorage.getItem("loginUser");
+        }
+
+        logout() {
+            localStorage.removeItem("isLogin");
+            localStorage.removeItem("loginUser");
+            this.showLogin();
+        }
+
+        showLogin() {
+            document.getElementById("profilePage").classList.add("hidden");
+            document.getElementById("loginPage").classList.remove("hidden");
+        }
+
+        checkLoginStatus() {
+            if (localStorage.getItem("isLogin") === "true") {
+                this.showProfile();
+            }
+        }
+    }
+
+    // Object dari class (OOP)
+    const app = new UserAuth();
+    app.checkLoginStatus();
+</script>
+
+</body>
+</html>
