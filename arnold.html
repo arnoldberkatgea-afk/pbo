@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Login App Modern</title>
+
+<style>
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#4e54c8,#8f94fb);
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.card{
+    background:white;
+    width:380px;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+.header{
+    background:#2d3e87;
+    color:white;
+    padding:25px;
+    text-align:center;
+}
+
+.header h2{
+    margin:0;
+}
+
+.content{
+    padding:25px;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:#2d5be3;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.hidden{
+    display:none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="card" id="loginPage">
+    <div class="header">
+        <h2>Welcome! 👋</h2>
+        <p>Silakan masuk untuk mengakses dashboard Anda.</p>
+    </div>
+    <div class="content">
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="app.login()">Masuk Sekarang</button>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="card hidden" id="dashboard">
+    <div class="header">
+        <h2>Dashboard</h2>
+    </div>
+    <div class="content">
+        <p>Halo, <b id="namaUser"></b></p>
+        <button onclick="app.logout()">Logout</button>
+    </div>
+</div>
+
+<script>
+class AuthApp{
+    constructor(){
+        this.users = [
+            {username:"rony", password:"123", nama:"Rony"},
+            {username:"salma", password:"456", nama:"Salma"},
+            {username:"parulian", password:"789", nama:"Parulian"}
+        ];
+
+        if(!localStorage.getItem("users")){
+            localStorage.setItem("users", JSON.stringify(this.users));
+        }
+    }
+
+    login(){
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const users = JSON.parse(localStorage.getItem("users"));
+
+        const user = users.find(
+            u => u.username === username && u.password === password
+        );
+
+        if(user){
+            localStorage.setItem("loginUser", JSON.stringify(user));
+            this.showDashboard();
+        }else{
+            alert("Username atau password salah!");
+        }
+    }
+
+    showDashboard(){
+        document.getElementById("loginPage").classList.add("hidden");
+        document.getElementById("dashboard").classList.remove("hidden");
+
+        const user = JSON.parse(localStorage.getItem("loginUser"));
+        document.getElementById("namaUser").innerText = user.nama;
+    }
+
+    logout(){
+        localStorage.removeItem("loginUser");
+        document.getElementById("dashboard").classList.add("hidden");
+        document.getElementById("loginPage").classList.remove("hidden");
+    }
+}
+
+const app = new AuthApp();
+
+if(localStorage.getItem("loginUser")){
+    app.showDashboard();
+}
+</script>
+
+</body>
+</html>
