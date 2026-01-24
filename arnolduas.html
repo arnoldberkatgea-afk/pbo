@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Aplikasi Login OOP</title>
+
+<style>
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#000;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* Card utama */
+.card{
+    background:#fff;
+    width:360px;
+    border-radius:10px;
+    box-shadow:0 0 15px rgba(255,255,255,0.2);
+    overflow:hidden;
+}
+
+/* Header */
+.header{
+    background:#000;
+    color:#fff;
+    padding:20px;
+    text-align:center;
+}
+
+/* Konten */
+.content{
+    padding:20px;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border:1px solid #000;
+    border-radius:5px;
+}
+
+/* Tombol */
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.login-btn{
+    background:#000;
+    color:#fff;
+}
+
+.logout-btn{
+    background:#fff;
+    color:#000;
+    border:1px solid #000;
+    margin-top:10px;
+}
+
+.hidden{
+    display:none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HALAMAN LOGIN -->
+<div class="card" id="loginPage">
+    <div class="header">
+        <h2>Selamat Datang</h2>
+        <p>Silakan login untuk melanjutkan</p>
+    </div>
+    <div class="content">
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button class="login-btn" onclick="loginApp.login()">Masuk Sekarang</button>
+    </div>
+</div>
+
+<!-- HALAMAN DASHBOARD -->
+<div class="card hidden" id="dashboardPage">
+    <div class="header">
+        <h2>Dashboard</h2>
+    </div>
+    <div class="content">
+        <p>Halo, <strong id="userName"></strong></p>
+        <button class="logout-btn" onclick="loginApp.logout()">Logout</button>
+    </div>
+</div>
+
+<script>
+// =====================================================
+// Class LoginSystem
+// Digunakan untuk mengelola proses login dan logout user
+// Data user disimpan menggunakan LocalStorage (simulasi File I/O)
+// Implementasi menggunakan konsep Object Oriented Programming (OOP)
+// =====================================================
+
+class LoginSystem {
+    constructor(){
+        // Data user contoh
+        this.users = [
+            {username:"arnold", password:"123"},
+            {username:"salma", password:"111"},
+            {username:"ifan", password:"222"}
+        ];
+
+        // Simpan data user ke LocalStorage jika belum ada
+        if(!localStorage.getItem("users")){
+            localStorage.setItem("users", JSON.stringify(this.users));
+        }
+    }
+
+    // Method login
+    login(){
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const users = JSON.parse(localStorage.getItem("users"));
+
+        const validUser = users.find(
+            u => u.username === username && u.password === password
+        );
+
+        if(validUser){
+            localStorage.setItem("loginUser", username);
+            this.showDashboard();
+        } else {
+            alert("Login gagal! Username atau password salah.");
+        }
+    }
+
+    // Menampilkan halaman dashboard
+    showDashboard(){
+        document.getElementById("loginPage").classList.add("hidden");
+        document.getElementById("dashboardPage").classList.remove("hidden");
+        document.getElementById("userName").innerText =
+            localStorage.getItem("loginUser");
+    }
+
+    // Method logout
+    logout(){
+        localStorage.removeItem("loginUser");
+        document.getElementById("dashboardPage").classList.add("hidden");
+        document.getElementById("loginPage").classList.remove("hidd
